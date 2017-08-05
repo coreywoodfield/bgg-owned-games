@@ -1,0 +1,12 @@
+#!/bin/bash
+
+branch=`git branch | grep * | sed 's/* //'`
+
+# Checkout master to run the latest working version
+git stash
+git checkout master
+
+./update_sheet.py
+
+git checkout $branch
+git stash pop
