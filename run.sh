@@ -1,6 +1,6 @@
 #!/bin/bash
 
-branch=`git branch | grep * | sed 's/* //'`
+branch=`git branch | grep '*' | sed 's/* //'`
 
 # Checkout master to run the latest working version
 git stash
