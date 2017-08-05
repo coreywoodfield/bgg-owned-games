@@ -6,7 +6,7 @@ branch=`git branch | grep * | sed 's/* //'`
 git stash
 git checkout master
 
-./update_sheet.py
+src/update_sheet.py
 
 git checkout $branch
 git stash pop
