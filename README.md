@@ -12,5 +12,48 @@ I am open to contributions, even ones that drastically change the structure of t
 3. Create a project through the Google API Console and get credentials to hit the google sheets api, as explained [here](https://www.twilio.com/blog/2017/02/an-easy-way-to-read-and-write-to-a-google-spreadsheet-in-python.html).
 Put the credentials file (name it client-secret.json) in the directory where you will be running the script.
 4. Create a spreadsheet named "Games" in Google Drive and share it to the email associated with the credentials created in step 3.
-5. Using launchd, cron, or some other utility, set up the script to run at some specified interval.
+5. Using launchd, cron, or some other utility, set up the script to run at some specified interval. A sample launchd configuration file is given below.
 6. Share the spreadsheet created in step 4 with your group.
+
+#### Sample launchd config file
+Note that this only works on mac, but apple recommends you use it over cron on mac
+1. Go to ~/Library/LaunchAgents
+2. Create a file called local.bgg.plist, that contains the following: (more info about plist files [here](http://www.launchd.info/))
+```xml
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>Label</key>
+	<string>local.bgg</string>
+	<key>Program</key>
+	<string>/path/to/repo/run.sh</string>
+	<key>WorkingDirectory</key>
+	<string>/path/to/working/directory</string>
+	<key>EnvironmentVariables</key>
+	<!-- make git, grep, sed accessible -->
+	<dict>
+		<key>PATH</key>
+		<string>/bin:/usr/bin:/usr/local/bin</string>
+	</dict>
+	<!-- run every morning at 6 (or when the computer wakes up if it's sleeping at 6 -->
+	<key>StartCalendarInterval</key>
+	<dict>
+		<key>Hour</key>
+		<integer>6</integer>
+		<key>Minute</key>
+		<integer>0</integer>
+	</dict>
+	<!-- also run whenever the usernames file is updated -->
+	<key>WatchPaths</key>
+	<array>
+		<string>/path/to/usernames.csv</string>
+	</array>
+	<key>StandardOutPath</key>
+	<string>/tmp/bgg.stdout</string>
+	<key>StandardErrorPath</key>
+	<string>/tmp/bgg.stdout</string>
+</dict>
+</plist>
+```
+3. Run `launchctl load ~/Library/LaunchAgents/local.bgg.plist`
