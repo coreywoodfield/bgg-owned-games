@@ -41,6 +41,8 @@ sheet.clear()
 sheet.insert_row(['Game', 'Who has it', 'Players'])
 row = 2
 for game in all_games:
-    sheet.insert_row([game['name'], ', '.join(game['owners']), '{}-{}'.format(game['minPlayers'],game['maxPlayers'])], row)
+    min, max = game['minPlayers'], game['maxPlayers']
+    players = str(min) if min == max else '{}-{}'.format(min, max)
+    sheet.insert_row([game['name'], ', '.join(game['owners']), players], row)
     row += 1
 
