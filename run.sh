@@ -1,12 +1,22 @@
 #!/bin/bash
 
-branch=`git branch | grep '*' | sed 's/* //'`
+exit_command=""
 
-# Checkout master to run the latest working version
-git stash
-git checkout master
+if [ -n "$(git status --porcelain)" ]; then
+  git stash
+  exit_command+="git stash pop; "
+fi
+
+branch=`git branch | grep '*' | sed 's/* //'`
+echo $branch
+if [ "$branch" != "master" ]; then
+  git checkout master
+  exit_command+="git checkout $branch"
+fi
+
+if [ -n "$exit_command" ]; then
+  trap "$exit_command" EXIT
+fi
 
 src/update_sheet.py
 
-git checkout $branch
-git stash pop
