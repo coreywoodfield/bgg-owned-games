@@ -1,4 +1,7 @@
 #!/bin/bash
+# Use this if you want guaranteed working behavior
+# This runs the latest version on master
+# If you want to test stuff you're developing run the python script directly
 
 exit_command=""
 
@@ -8,7 +11,6 @@ if [ -n "$(git status --porcelain)" ]; then
 fi
 
 branch=`git branch | grep '*' | sed 's/* //'`
-echo $branch
 if [ "$branch" != "master" ]; then
   git checkout master
   exit_command+="git checkout $branch"
@@ -18,5 +20,6 @@ if [ -n "$exit_command" ]; then
   trap "$exit_command" EXIT
 fi
 
-src/update_sheet.py
+# run this in the background so it can finish immediately and undo git changes
+src/update_sheet.py &
 

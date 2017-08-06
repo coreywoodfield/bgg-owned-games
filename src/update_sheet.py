@@ -38,9 +38,9 @@ for person, username in people.iteritems():
 all_games = sorted(all_games.values(), key=itemgetter('rank'))
 
 sheet.clear()
-sheet.insert_row(['Game', 'Who has it'])
+sheet.insert_row(['Game', 'Who has it', 'Players'])
 row = 2
 for game in all_games:
-    sheet.insert_row([game['name'], ', '.join(game['owners'])], row)
+    sheet.insert_row([game['name'], ', '.join(game['owners']), '{}-{}'.format(game['minPlayers'],game['maxPlayers'])], row)
     row += 1
 
